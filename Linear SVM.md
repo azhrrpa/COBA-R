@@ -1,117 +1,116 @@
-Berikut adalah langkah-langkah untuk melakukan klasifikasi menggunakan metode **Support Vector Machine (SVM)** dengan dataset **Iris** di R. 
+Proyek ini bertujuan untuk menganalisis data kesehatan menggunakan algoritma Support Vector Machine (SVM). Dalam tutorial ini, kita akan melakukan preprocessing data, membangun model prediksi untuk mendeteksi risiko serangan jantung, dan mengevaluasi performa model menggunakan berbagai metrik. Selain itu, tutorial ini juga mencakup langkah-langkah visualisasi data dan hyperplane SVM. Pada akhir tutorial, Anda akan belajar bagaimana mengunggah proyek ini ke GitHub untuk dokumentasi atau kolaborasi lebih lanjut.
 
-### 1. **Instal dan Muat Paket yang Dibutuhkan**
-Pastikan Anda memiliki paket-paket yang dibutuhkan, seperti `e1071` untuk SVM dan `caret` untuk evaluasi.
+---
 
-```R
-# Install packages jika belum terinstal
-install.packages("e1071")
-install.packages("caret")
-```
+### **1. Importing Required Libraries**
+Kode memuat sejumlah pustaka R yang relevan untuk analisis, pemrosesan data, dan visualisasi, seperti `ggplot2` untuk plot, `caret` untuk pelatihan model machine learning, dan `e1071` untuk algoritma SVM.
 
-```R
-# Muat library
-library(e1071)
+```r
+library(ggplot2)
 library(caret)
+library(e1071)
+library(pROC)
+library(gridExtra)
+library(reshape2)
 ```
 
 ---
 
-### 2. **Muat Dataset Iris**
-Dataset Iris sudah tersedia secara bawaan di R, jadi tidak perlu diunduh.
+### **2. Load Dataset**
+File dataset diimpor dari path lokal. Disarankan mengganti path dengan format relatif atau menempatkan dataset dalam direktori kerja agar file dapat diakses secara universal.
 
-```R
-# Muat dataset Iris
-data(iris)
-
-# Tampilkan ringkasan dataset
-summary(iris)
+```r
+df <-  read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
 ```
 
 ---
 
-### 3. **Bagi Dataset Menjadi Data Latih dan Uji**
-Kita perlu membagi dataset menjadi data latih (training) dan data uji (testing) untuk mengevaluasi model.
+### **3. Preprocessing**
+Kolom diubah namanya agar lebih mudah digunakan, missing values diidentifikasi, dan fitur kategorikal dikonversi menjadi tipe faktor. Langkah ini memastikan dataset bersih dan siap digunakan.
 
-```R
-# Atur seed untuk hasil acak yang konsisten
-set.seed(123)
-
-# Bagi data menjadi 80% training dan 20% testing
-index <- createDataPartition(iris$Species, p = 0.8, list = FALSE)
-train_data <- iris[index, ]
-test_data <- iris[-index, ]
+```r
+colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol", 
+                  "fasting_blood_sugar", "restecg", "max_heart_rate", "angina", 
+                  "oldpeak", "slope", "n_vessels", "thall", "heart_attack")
+df$sex <- as.factor(df$sex)
+df$fasting_blood_sugar <- as.factor(df$fasting_blood_sugar)
+df$angina <- as.factor(df$angina)
+df$n_vessels <- as.factor(df$n_vessels)
+df$thall <- as.factor(df$thall)
+df$heart_attack <- as.factor(df$heart_attack)
 ```
 
 ---
 
-### 4. **Latih Model SVM**
-Latih model SVM menggunakan data latih.
+### **4. Exploratory Data Analysis (EDA)**
+Melakukan analisis korelasi antar fitur numerik dan menghasilkan heatmap korelasi menggunakan `ggplot2`.
 
-```R
-# Latih model SVM
-svm_model <- svm(Species ~ ., data = train_data, kernel = "linear")
-
-# Tampilkan ringkasan model
-summary(svm_model)
+```r
+numeric_cols <- sapply(df, is.numeric)
+df_corr <- cor(df[, numeric_cols], use = "complete.obs")
+melted_corr <- melt(df_corr)
+ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0) +
+  labs(title = "Heatmap Korelasi")
 ```
 
 ---
 
-### 5. **Lakukan Prediksi**
-Gunakan model yang telah dilatih untuk membuat prediksi pada data uji.
+### **5. Data Standardization and Outlier Detection**
+Semua fitur numerik diskalakan menggunakan `scale()` untuk meningkatkan kinerja model SVM. Z-score digunakan untuk mendeteksi outlier.
 
-```R
-# Prediksi pada data uji
-predictions <- predict(svm_model, newdata = test_data)
-
-# Tampilkan hasil prediksi
-print(predictions)
+```r
+df[numeric_cols] <- scale(df[numeric_cols])
+z_scores <- scale(df[, numeric_cols])
+outliers <- which(abs(z_scores) > 3, arr.ind = TRUE)
+df_no_outliers <- df[apply(z_scores, 1, function(x) all(abs(x) <= 3)), ]
 ```
 
 ---
 
-### 6. **Evaluasi Model**
-Hitung metrik evaluasi seperti akurasi atau confusion matrix.
+### **6. Dataset Splitting**
+Dataset dibagi menjadi 80% untuk pelatihan dan 20% untuk pengujian menggunakan fungsi `createDataPartition`.
 
-```R
-# Buat confusion matrix
-confusion <- confusionMatrix(predictions, test_data$Species)
-
-# Tampilkan hasil evaluasi
-print(confusion)
+```r
+set.seed(42)
+trainIndex <- createDataPartition(df$heart_attack, p = 0.8, list = FALSE)
+df_train <- df[trainIndex, ]
+df_test <- df[-trainIndex, ]
 ```
 
 ---
 
-### 7. **Visualisasi Hasil (Opsional)**
-Anda dapat memvisualisasikan hasil klasifikasi jika datasetnya hanya melibatkan dua fitur.
+### **7. Model Training (SVM)**
+Model SVM dilatih menggunakan kernel linear dan cross-validation (K-Fold). Hyperparameter C disesuaikan untuk mencari performa terbaik.
 
-```R
-# Visualisasi dengan dua fitur pertama
-plot(svm_model, train_data, Petal.Length ~ Petal.Width, slice = list(Sepal.Length = 5, Sepal.Width = 3))
+```r
+ctrl <- trainControl(method = "cv", number = 5)
+svm_model <- train(heart_attack ~ ., data = df_train, method = "svmLinear", 
+                   trControl = ctrl,
+                   tuneGrid = expand.grid(C = c(0.1, 1, 10)))
 ```
 
 ---
 
-### 8. **Modifikasi Kernel (Opsional)**
-Anda dapat mencoba kernel lain seperti `radial`, `polynomial`, atau `sigmoid`.
+### **8. Evaluation Metrics**
+Model dievaluasi menggunakan data pengujian. Metrik seperti akurasi, precision, recall, F1-score, dan AUC dihitung dan ditampilkan.
 
-```R
-# Latih model SVM dengan kernel radial
-svm_model_radial <- svm(Species ~ ., data = train_data, kernel = "radial")
-
-# Evaluasi model radial
-predictions_radial <- predict(svm_model_radial, newdata = test_data)
-confusion_radial <- confusionMatrix(predictions_radial, test_data$Species)
-
-print(confusion_radial)
+```r
+pred <- predict(svm_model, df_test)
+conf_matrix <- confusionMatrix(pred, df_test$heart_attack)
+roc_obj <- roc(as.numeric(df_test$heart_attack), as.numeric(pred))
+auc_val <- auc(roc_obj)
 ```
 
 ---
 
-### Output yang Diharapkan
-- Confusion matrix akan menunjukkan performa model seperti akurasi, presisi, dan recall.
-- Visualisasi (jika dilakukan) akan menampilkan hyperplane yang memisahkan kelas.
+### **9. Visualizing Hyperplanes**
+Plot hyperplane SVM dibuat menggunakan kombinasi 2 fitur dengan `plot.svm`. Ini membantu memahami klasifikasi dalam ruang 2D.
 
-Semoga tutorial ini membantu! 😊
+```r
+subset_df <- df[, c("age", "blood_pressure", "heart_attack")]
+svm_model <- svm(heart_attack ~ age + blood_pressure, data = subset_df, kernel = "linear", cost = 1)
+plot(svm_model, subset_df, age ~ blood_pressure)
+```
+
