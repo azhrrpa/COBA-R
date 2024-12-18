@@ -43,7 +43,7 @@ Dalam eksperimen ini, kernel polynomial digunakan untuk memodelkan hubungan komp
 | **Kecocokan Data**    | Cocok untuk data yang dapat dipisahkan secara linear | Cocok untuk data dengan hubungan non-linear kompleks |
 | **Kompleksitas**      | Rendah                                    | Lebih tinggi karena melibatkan dimensi tambahan |
 | **Hyperparameter**    | Hanya melibatkan parameter regulasi (C)    | Melibatkan derajat polinomial (degree) dan skala |
-| **Contoh Visualisasi**| ![Linear Kernel](images/svm_hyperplane_linear.png) | ![Polynomial Kernel](images/svm_hyperplane_age_bp.png) |
+
 
 ---
 
