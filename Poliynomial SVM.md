@@ -182,4 +182,3 @@ svm_model <- train(heart_attack ~ ., data = df_train, method = "svmPoly",
 
 ---
 
-Cukup copas langsung ke **GitHub** ya! Formatnya pasti sesuai.
