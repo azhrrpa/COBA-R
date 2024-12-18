@@ -119,6 +119,10 @@ plot(roc_obj, main = "ROC Curve", col = "blue")
 auc_val <- auc(roc_obj)
 cat("AUC:", auc_val, "\n")
 ```
+**Output**
+
+![alt text](https://github.com/azhrrpa/SVM-R/blob/main/gambar/ROC.png?raw=true)
+
 
 - **Hyperplane SVM (Visualisasi 2D)**:
 Menggunakan kombinasi fitur tertentu untuk memvisualisasikan hyperplane:
@@ -127,6 +131,10 @@ subset_df <- df[, c("age", "blood_pressure", "heart_attack")]
 svm_model <- svm(heart_attack ~ age + blood_pressure, data = subset_df, kernel = "radial", cost = 1)
 plot(svm_model, subset_df, age ~ blood_pressure)
 ```
+**Output**
+
+![alt text](https://github.com/azhrrpa/SVM-R/blob/main/gambar/RBF1.png?raw=true)
+
 
 #### **10. Kesimpulan**
 Hasil evaluasi model menunjukkan akurasi, precision, recall, F1-Score, dan AUC dari model SVM yang digunakan. Tutorial ini mengajarkan langkah-langkah preprocessing, pelatihan model, dan evaluasi performa.
