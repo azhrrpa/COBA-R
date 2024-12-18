@@ -122,7 +122,8 @@ Kolom-kolom dengan data kategorikal, seperti sex, fasting_blood_sugar, angina, d
 numeric_cols <- sapply(df, is.numeric)
 df_corr <- cor(df[, numeric_cols], use = "complete.obs")
 ```
-**Penjelasan**:  
+**Penjelasan**: Kode ini digunakan untuk menghitung matriks korelasi dari kolom numerik dalam dataset df. Fungsi sapply(df, is.numeric) mengidentifikasi kolom yang bertipe numerik dan menyimpannya dalam vektor logika numeric_cols. Kemudian, fungsi cor() menghitung nilai korelasi antar kolom numerik tersebut dengan hanya menggunakan observasi lengkap (tanpa nilai yang hilang) sesuai parameter use = "complete.obs". Hasilnya, df_corr berisi matriks korelasi yang menunjukkan hubungan linear antar kolom numerik.
+
 ---
 
 ## **7. Visualisasi Heatmap Korelasi**
@@ -137,6 +138,7 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 10, hjust = 1)) +
   labs(title = "Heatmap Korelasi")
 ```
+**Penjelasan**: Kode ini digunakan untuk membuat visualisasi heatmap korelasi menggunakan ggplot2. Matriks korelasi df_corr yang berisi hubungan antar variabel numerik diubah menjadi format panjang dengan fungsi melt, sehingga dapat divisualisasikan. Heatmap dibuat menggunakan geom_tile, di mana nilai korelasi diwakili oleh gradasi warna: biru untuk korelasi negatif, merah untuk positif, dan putih untuk nol. Label angka pada setiap sel ditambahkan dengan geom_text untuk menampilkan nilai korelasi secara langsung. Tema minimalis (theme_minimal) diterapkan untuk tampilan bersih, sementara teks pada sumbu x dimiringkan agar label variabel tidak bertumpuk. Visualisasi ini membantu memahami hubungan linear antar variabel numerik dalam dataset dengan cepat dan intuitif.
 
 ---
 
@@ -145,6 +147,7 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
 ```r
 df[numeric_cols] <- scale(df[numeric_cols])
 ```
+**Penjelasan**: Kode ini digunakan untuk melakukan normalisasi atau standarisasi pada kolom numerik dalam dataset df. Fungsi scale() mengubah setiap kolom numerik sehingga memiliki mean (rata-rata) 0 dan standard deviation (simpangan baku) 1. Normalisasi ini penting untuk memastikan semua variabel numerik berada pada skala yang sama, terutama saat digunakan dalam algoritma machine learning seperti SVM atau k-Means yang sensitif terhadap skala variabel. Setelah eksekusi, semua kolom numerik dalam df akan berada pada skala yang seragam, sehingga meminimalkan bias akibat perbedaan skala antar variabel.
 
 ---
 
@@ -154,6 +157,7 @@ df[numeric_cols] <- scale(df[numeric_cols])
 z_scores <- scale(df[, numeric_cols])
 outliers <- which(abs(z_scores) > 3, arr.ind = TRUE)
 ```
+**Penjelasan**: Kode ini digunakan untuk mendeteksi outlier pada kolom numerik dalam dataset df menggunakan metode z-score. Fungsi scale() menghitung z-score, yaitu ukuran deviasi setiap nilai dari rata-rata dalam satuan simpangan baku. Nilai z-score yang lebih besar dari 3 (atau kurang dari -3) dianggap sebagai outlier karena berada jauh dari rata-rata. Perintah which(..., arr.ind = TRUE) digunakan untuk menemukan posisi elemen-elemen tersebut dalam dataset, sehingga menghasilkan indeks baris dan kolom yang mengindikasikan lokasi outlier. Proses ini membantu mengidentifikasi nilai ekstrem yang dapat memengaruhi hasil analisis atau model.
 
 ---
 
@@ -164,6 +168,7 @@ trainIndex <- createDataPartition(df$heart_attack, p = 0.8, list = FALSE)
 df_train <- df[trainIndex, ]
 df_test <- df[-trainIndex, ]
 ```
+**Penjelasan**: Kode tersebut bertujuan untuk membagi dataset menjadi data latih (80%) dan data uji (20%) menggunakan fungsi createDataPartition(), yang memastikan pembagian stratifikasi berdasarkan variabel target (heart_attack). Data latih (df_train) digunakan untuk melatih model, sementara data uji (df_test) digunakan untuk mengukur kinerja model pada data yang belum pernah dilihat, sehingga membantu mengevaluasi kemampuan generalisasi model.
 
 ---
 
@@ -173,6 +178,7 @@ df_test <- df[-trainIndex, ]
 svm_model <- train(heart_attack ~ ., data = df_train, method = "svmPoly", 
                    tuneGrid = expand.grid(C = c(0.1, 1, 10), degree = c(2, 3), scale = c(0.01, 0.1)))
 ```
+**Penjelasan**: Model dilatih menggunakan fungsi train() dari paket caret, di mana heart_attack ~ . menunjukkan bahwa variabel target adalah heart_attack, sementara semua variabel lainnya digunakan sebagai fitur. Metode svmPoly digunakan untuk memilih kernel polinomial. Parameter C, degree, dan scale disesuaikan berdasarkan nilai-nilai dalam tuneGrid untuk menemukan kombinasi terbaik yang menghasilkan kinerja optimal.
 
 ---
 
