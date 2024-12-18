@@ -22,7 +22,7 @@ File dataset diimpor dari path lokal. Disarankan mengganti path dengan format re
 ```r
 df <-  read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
 ```
-
+**penjelasan:** 
 ---
 
 ### **3. Preprocessing**
