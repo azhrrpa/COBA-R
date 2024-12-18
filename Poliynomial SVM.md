@@ -85,11 +85,10 @@ Digunakan untuk membaca file CSV bernama `heart.csv` dari jalur file yang ditent
 ```r
 colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol", 
                   "fasting_blood_sugar", "restecg", "max_heart_rate", "angina", 
-                  "oldpeak", "slope", "n_vessels", "thall", "heart_attack")
+                  "oldpeak", "slope", "n_vessels", "thall", "heart_attack") 
 ```
 
-**Penjelasan**:  
-Nama kolom diubah agar lebih mudah diakses dan dipahami.
+**Penjelasan**:  digunakan untuk mengganti nama kolom dalam data frame df. Penyesuaian ini dilakukan untuk memberikan nama kolom yang lebih deskriptif, konsisten, dan mudah diakses saat melakukan analisis. Misalnya, kolom yang sebelumnya memiliki nama teknis atau tidak jelas kini menjadi lebih intuitif, seperti "age" untuk usia atau "cholesterol" untuk kadar kolesterol. Hal ini juga penting untuk memastikan nama kolom sesuai dengan sintaks R, khususnya jika nama asli kolom mengandung spasi atau karakter khusus. Dengan perubahan ini, analisis dan manipulasi data menjadi lebih efisien dan mudah dipahami.
 
 ---
 
@@ -99,10 +98,7 @@ Nama kolom diubah agar lebih mudah diakses dan dipahami.
 cat("Jumlah nilai yang hilang:", sum(is.na(df)), "\n")
 ```
 
-**Penjelasan**:  
-Mengecek jumlah nilai yang hilang dalam dataset.  
-
----
+**Penjelasan**: Perintah ini digunakan untuk menghitung dan menampilkan jumlah nilai yang hilang (NA) dalam dataset df. Fungsi is.na(df) menghasilkan nilai TRUE untuk setiap elemen yang hilang, kemudian sum() menjumlahkan seluruh nilai TRUE tersebut. Outputnya menunjukkan total nilai yang hilang dalam dataset.
 
 ## **5. Konversi Kolom Kategorikal Menjadi Faktor**
 
@@ -116,7 +112,7 @@ df$heart_attack <- as.factor(df$heart_attack)
 ```
 
 **Penjelasan**:  
-Kolom dengan data kategorikal diubah menjadi tipe `factor` agar SVM dapat mengolahnya dengan benar.
+Kolom-kolom dengan data kategorikal, seperti sex, fasting_blood_sugar, angina, dan lainnya, diubah menjadi tipe data factor. Konversi ini penting untuk analisis dan pemodelan, terutama dalam algoritma seperti SVM (Support Vector Machine), yang memerlukan tipe data faktor untuk memproses variabel kategorikal secara benar.
 
 ---
 
