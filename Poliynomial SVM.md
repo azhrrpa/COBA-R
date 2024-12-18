@@ -140,6 +140,10 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
 ```
 **Penjelasan**: Kode ini digunakan untuk membuat visualisasi heatmap korelasi menggunakan ggplot2. Matriks korelasi df_corr yang berisi hubungan antar variabel numerik diubah menjadi format panjang dengan fungsi melt, sehingga dapat divisualisasikan. Heatmap dibuat menggunakan geom_tile, di mana nilai korelasi diwakili oleh gradasi warna: biru untuk korelasi negatif, merah untuk positif, dan putih untuk nol. Label angka pada setiap sel ditambahkan dengan geom_text untuk menampilkan nilai korelasi secara langsung. Tema minimalis (theme_minimal) diterapkan untuk tampilan bersih, sementara teks pada sumbu x dimiringkan agar label variabel tidak bertumpuk. Visualisasi ini membantu memahami hubungan linear antar variabel numerik dalam dataset dengan cepat dan intuitif.
 
+**Output Korelasi**
+
+![alt text](https://github.com/azhrrpa/SVM-R/blob/main/gambar/Korelasi.png?raw=true)
+
 ---
 
 ## **8. Standarisasi Fitur Numerik**
