@@ -1,4 +1,4 @@
-Berikut adalah **Markdown GitHub** yang sudah ditata dengan format dan struktur rapi agar tampil sempurna di GitHub tanpa masalah **bold** atau penataan:
+Berikut adalah **SVM dengan Polynomial** 
 
 ---
 
