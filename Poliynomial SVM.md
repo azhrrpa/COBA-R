@@ -75,7 +75,7 @@ Library yang digunakan:
 df <- read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
 ```
 
-**Penjelasan**: digunakan untuk membaca file CSV bernama heart.csv dari jalur file yang ditentukan dan memuatnya ke dalam variabel df dalam bentuk data frame. Data frame adalah struktur data berbentuk tabel yang terdiri dari baris (observasi) dan kolom (atribut). File heart.csv kemungkinan berisi data terkait kesehatan jantung, seperti usia, tekanan darah, kadar kolesterol, atau indikator penyakit jantung. Setelah data dimuat, langkah berikutnya biasanya adalah mengeksplorasi data dengan fungsi seperti head(df) untuk melihat beberapa baris awal, atau str(df) untuk memeriksa struktur dataset. Pastikan jalur file benar, file berformat CSV valid, dan data dapat dibaca tanpa kesalahan.
+**Penjelasan** : **digunakan untuk membaca file CSV bernama heart.csv dari jalur file yang ditentukan dan memuatnya ke dalam variabel df dalam bentuk data frame. Data frame adalah struktur data berbentuk tabel yang terdiri dari baris (observasi) dan kolom (atribut). File heart.csv kemungkinan berisi data terkait kesehatan jantung, seperti usia, tekanan darah, kadar kolesterol, atau indikator penyakit jantung. Setelah data dimuat, langkah berikutnya biasanya adalah mengeksplorasi data dengan fungsi seperti head(df) untuk melihat beberapa baris awal, atau str(df) untuk memeriksa struktur dataset. Pastikan jalur file benar, file berformat CSV valid, dan data dapat dibaca tanpa kesalahan.**
 ---
 
 ## **3. Penamaan Ulang Kolom**
