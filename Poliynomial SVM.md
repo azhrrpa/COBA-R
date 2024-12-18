@@ -122,7 +122,7 @@ Kolom-kolom dengan data kategorikal, seperti sex, fasting_blood_sugar, angina, d
 numeric_cols <- sapply(df, is.numeric)
 df_corr <- cor(df[, numeric_cols], use = "complete.obs")
 ```
-
+**Penjelasan**:  
 ---
 
 ## **7. Visualisasi Heatmap Korelasi**
