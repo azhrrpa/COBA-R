@@ -127,4 +127,8 @@ plot(svm_model, subset_df, age ~ blood_pressure)
 **Penjelasan**: 
 Kode tersebut digunakan untuk membangun model Support Vector Machine (SVM) dengan kernel linear untuk memprediksi variabel target heart_attack berdasarkan dua fitur, yaitu age dan blood_pressure, yang diambil dari subset dataset df. Model dilatih menggunakan fungsi svm() dengan parameter cost = 1, yang mengatur tingkat penalti untuk kesalahan klasifikasi. Setelah model dilatih, fungsi plot() digunakan untuk memvisualisasikan hasil model SVM, dengan plot yang menggambarkan pemisahan kelas (heart_attack) berdasarkan variabel age dan blood_pressure dalam ruang dua dimensi. Visualisasi ini membantu memahami bagaimana model memisahkan dua kelas dalam data
 
+**Output**
+
+![alt text](https://github.com/azhrrpa/SVM-R/blob/main/gambar/Linear1.png?raw=true)
+
 ---
