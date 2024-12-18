@@ -53,6 +53,9 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0) +
   theme_minimal()
 ```
+**Output Korelasi**
+
+![alt text](https://github.com/azhrrpa/SVM-R/blob/main/gambar/Korelasi.png?raw=true)
 
 #### **5. Standarisasi dan Identifikasi Outlier**
 - **Standarisasi Data Numerik**:
