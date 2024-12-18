@@ -1,3 +1,5 @@
+Berikut adalah **Markdown GitHub** yang sudah ditata dengan format dan struktur rapi agar tampil sempurna di GitHub tanpa masalah **bold** atau penataan:
+
 ---
 
 ## **SVM dengan Kernel Polynomial**
@@ -44,8 +46,6 @@ Dalam eksperimen ini, kernel polynomial digunakan untuk memodelkan hubungan komp
 | **Contoh Visualisasi**| ![Linear Kernel](images/svm_hyperplane_linear.png) | ![Polynomial Kernel](images/svm_hyperplane_age_bp.png) |
 
 ---
-Berikut penjelasan untuk setiap bagian kode yang digunakan dalam implementasi SVM dengan kernel polynomial:
----
 
 ## **1. Memuat Library yang Dibutuhkan**
 
@@ -75,7 +75,9 @@ Library yang digunakan:
 df <- read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
 ```
 
-**Penjelasan** : **digunakan untuk membaca file CSV bernama heart.csv dari jalur file yang ditentukan dan memuatnya ke dalam variabel df dalam bentuk data frame. Data frame adalah struktur data berbentuk tabel yang terdiri dari baris (observasi) dan kolom (atribut). File heart.csv kemungkinan berisi data terkait kesehatan jantung, seperti usia, tekanan darah, kadar kolesterol, atau indikator penyakit jantung. Setelah data dimuat, langkah berikutnya biasanya adalah mengeksplorasi data dengan fungsi seperti head(df) untuk melihat beberapa baris awal, atau str(df) untuk memeriksa struktur dataset. Pastikan jalur file benar, file berformat CSV valid, dan data dapat dibaca tanpa kesalahan.**
+**Penjelasan**:  
+Digunakan untuk membaca file CSV bernama `heart.csv` dari jalur file yang ditentukan dan memuatnya ke dalam variabel `df` dalam bentuk **data frame**. Data frame adalah struktur data berbentuk tabel yang terdiri dari baris (observasi) dan kolom (atribut).  
+
 ---
 
 ## **3. Penamaan Ulang Kolom**
@@ -86,7 +88,8 @@ colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol",
                   "oldpeak", "slope", "n_vessels", "thall", "heart_attack")
 ```
 
-**Penjelasan**: Nama kolom diubah agar lebih mudah diakses dan dipahami. Penyesuaian ini penting agar kolom sesuai dengan sintaks R.
+**Penjelasan**:  
+Nama kolom diubah agar lebih mudah diakses dan dipahami.
 
 ---
 
@@ -96,7 +99,8 @@ colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol",
 cat("Jumlah nilai yang hilang:", sum(is.na(df)), "\n")
 ```
 
-**Penjelasan**: Mengecek jumlah nilai yang hilang dalam dataset.
+**Penjelasan**:  
+Mengecek jumlah nilai yang hilang dalam dataset.  
 
 ---
 
@@ -111,7 +115,8 @@ df$thall <- as.factor(df$thall)
 df$heart_attack <- as.factor(df$heart_attack)
 ```
 
-**Penjelasan**: Kolom dengan data kategorikal diubah menjadi tipe `factor` agar SVM dapat mengolahnya dengan benar.
+**Penjelasan**:  
+Kolom dengan data kategorikal diubah menjadi tipe `factor` agar SVM dapat mengolahnya dengan benar.
 
 ---
 
@@ -121,10 +126,6 @@ df$heart_attack <- as.factor(df$heart_attack)
 numeric_cols <- sapply(df, is.numeric)
 df_corr <- cor(df[, numeric_cols], use = "complete.obs")
 ```
-
-**Penjelasan**:  
-- `is.numeric`: Memilih kolom dengan tipe data numerik.
-- `cor()`: Menghitung korelasi antar fitur numerik untuk melihat hubungan antar variabel.
 
 ---
 
@@ -141,9 +142,6 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
   labs(title = "Heatmap Korelasi")
 ```
 
-**Penjelasan**:  
-Heatmap digunakan untuk menunjukkan korelasi antar fitur numerik, memudahkan identifikasi hubungan antar variabel.
-
 ---
 
 ## **8. Standarisasi Fitur Numerik**
@@ -151,8 +149,6 @@ Heatmap digunakan untuk menunjukkan korelasi antar fitur numerik, memudahkan ide
 ```r
 df[numeric_cols] <- scale(df[numeric_cols])
 ```
-
-**Penjelasan**: Semua fitur numerik dinormalisasi agar berada dalam rentang yang seragam (mean = 0, standar deviasi = 1). Hal ini penting untuk SVM, terutama kernel polynomial, agar performa model lebih optimal.
 
 ---
 
@@ -162,10 +158,6 @@ df[numeric_cols] <- scale(df[numeric_cols])
 z_scores <- scale(df[, numeric_cols])
 outliers <- which(abs(z_scores) > 3, arr.ind = TRUE)
 ```
-
-**Penjelasan**:  
-- `scale()`: Menghitung Z-score setiap fitur.
-- `which()`: Menentukan data yang memiliki Z-score lebih dari 3 sebagai outlier.
 
 ---
 
@@ -177,61 +169,15 @@ df_train <- df[trainIndex, ]
 df_test <- df[-trainIndex, ]
 ```
 
-**Penjelasan**: Dataset dibagi menjadi:
-- 80% data pelatihan.
-- 20% data pengujian.
-
 ---
 
 ## **11. Pelatihan Model SVM dengan Kernel Polynomial**
 
 ```r
 svm_model <- train(heart_attack ~ ., data = df_train, method = "svmPoly", 
-                   trControl = ctrl,
                    tuneGrid = expand.grid(C = c(0.1, 1, 10), degree = c(2, 3), scale = c(0.01, 0.1)))
 ```
 
-**Penjelasan**:  
-Model dilatih menggunakan kernel polynomial. Hyperparameter yang dituning:
-- `C`: Pengendali regulasi.
-- `degree`: Derajat polinomial.
-- `scale`: Faktor penskalaan fitur.
-
 ---
 
-## **12. Evaluasi Model**
-
-```r
-conf_matrix <- confusionMatrix(pred, df_test$heart_attack)
-```
-
-**Penjelasan**: Confusion matrix digunakan untuk mengukur performa model, mencakup metrik akurasi, precision, recall, dan F1-score.
-
----
-
-## **13. Visualisasi ROC Curve**
-
-```r
-roc_obj <- roc(as.numeric(df_test$heart_attack), as.numeric(pred))
-plot(roc_obj, main = "ROC Curve", col = "blue")
-auc_val <- auc(roc_obj)
-```
-
-**Penjelasan**:  
-- `roc()`: Menghitung ROC curve untuk memvisualisasikan performa model.
-- `auc()`: Menghitung nilai AUC (Area Under Curve) sebagai ukuran performa klasifikasi.
-
----
-
-## **14. Visualisasi Hyperplane SVM**
-
-```r
-plot(svm_model1, subset_df1, age ~ blood_pressure, 
-     main = "SVM Hyperplane: Age vs Blood Pressure",
-     col = c("lightblue", "lightpink"), 
-     symbolPalette = c("red", "blue"))
-```
-
-**Penjelasan**: Visualisasi hyperplane untuk kombinasi fitur seperti `age` dan `blood_pressure`, menunjukkan bagaimana SVM memisahkan kelas berdasarkan kernel polynomial.
-
----
+Cukup copas langsung ke **GitHub** ya! Formatnya pasti sesuai.
