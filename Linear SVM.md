@@ -58,6 +58,8 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
 ```
 **Penjelasan**: Kode tersebut digunakan untuk membuat heatmap korelasi yang menggambarkan hubungan antara variabel numerik dalam dataset df. Pertama, kolom numerik diidentifikasi menggunakan sapply() dengan fungsi is.numeric. Kemudian, matriks korelasi dihitung menggunakan fungsi cor() dengan hanya menggunakan data lengkap (use = "complete.obs"). Matriks tersebut dilelehkan ke dalam format panjang menggunakan fungsi melt() agar dapat digunakan dalam visualisasi. Heatmap dibuat dengan ggplot2, menggunakan geom_tile() untuk menampilkan hubungan korelasi dalam bentuk warna, di mana gradien warna menunjukkan kekuatan dan arah korelasi (biru untuk negatif, merah untuk positif, putih untuk nol). Visualisasi ini membantu memahami hubungan antarvariabel dalam dataset
 
+Output Korelasi
+![alt text](https://github.com/azhrrpa/SVM-R/blob/main/gambar/Korelasi.png?raw=true)
 ---
 
 ### **5. Data Standardization and Outlier Detection**
