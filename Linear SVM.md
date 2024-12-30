@@ -1,5 +1,17 @@
 Proyek ini bertujuan untuk menganalisis data kesehatan menggunakan algoritma Support Vector Machine (SVM). Dalam tutorial ini, kita akan melakukan preprocessing data, membangun model prediksi untuk mendeteksi risiko serangan jantung, dan mengevaluasi performa model menggunakan berbagai metrik. Selain itu, tutorial ini juga mencakup langkah-langkah visualisasi data dan hyperplane SVM. 
 
+### **Pendahuluan**
+Support Vector Machine (SVM) adalah algoritma machine learning yang dapat digunakan untuk klasifikasi dan regresi. Salah satu kekuatan utama SVM terletak pada kemampuan kernel untuk memetakan data ke dimensi yang lebih tinggi, sehingga data yang tidak terpisahkan secara linear menjadi lebih mudah untuk dipisahkan.
+
+### **Perbedaan dengan Kernel Linear**
+
+| Aspek                 | Kernel Linear                              | Kernel Polynomial                              |
+|-----------------------|--------------------------------------------|-----------------------------------------------|
+| **Pendekatan**        | Menggunakan garis lurus sebagai hyperplane | Menggunakan fungsi polinomial sebagai hyperplane |
+| **Kecocokan Data**    | Cocok untuk data yang dapat dipisahkan secara linear | Cocok untuk data dengan hubungan non-linear kompleks |
+| **Kompleksitas**      | Rendah                                    | Lebih tinggi karena melibatkan dimensi tambahan |
+| **Hyperparameter**    | Hanya melibatkan parameter regulasi (C)    | Melibatkan derajat polinomial (degree) dan skala |
+
 ---
 
 ### **1. Importing Required Libraries**
