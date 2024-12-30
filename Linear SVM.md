@@ -26,6 +26,15 @@ library(gridExtra)
 library(reshape2)
 ```
 
+**Penjelasan**:  
+Library yang digunakan:
+- **ggplot2**: Untuk membuat visualisasi data.
+- **caret**: Untuk pelatihan model machine learning dan cross-validation.
+- **e1071**: Untuk algoritma SVM.
+- **pROC**: Untuk menghitung dan memvisualisasikan ROC curve.
+- **gridExtra**: Untuk mengatur tata letak beberapa plot.
+- **reshape2**: Untuk mengolah data agar sesuai dengan format input visualisasi.
+
 ---
 
 ### **2. Load Dataset**
@@ -34,17 +43,35 @@ File dataset diimpor dari path lokal. Disarankan mengganti path dengan format re
 ```r
 df <-  read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
 ```
+
 **penjelasan:** Fungsi read.csv() digunakan untuk memuat data dari file CSV yang berlokasi di path "C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv"  Data yang diimpor akan disimpan dalam objek df, yang nantinya dapat digunakan untuk analisis lebih lanjut seperti preprocessing, pelatihan model, atau evaluasi.
 
 ---
-
-### **3. Preprocessing**
-Kolom diubah namanya agar lebih mudah digunakan, missing values diidentifikasi, dan fitur kategorikal dikonversi menjadi tipe faktor. Langkah ini memastikan dataset bersih dan siap digunakan.
+## **3. Penamaan Ulang Kolom**
 
 ```r
 colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol", 
                   "fasting_blood_sugar", "restecg", "max_heart_rate", "angina", 
-                  "oldpeak", "slope", "n_vessels", "thall", "heart_attack")
+                  "oldpeak", "slope", "n_vessels", "thall", "heart_attack") 
+```
+
+**Penjelasan**:  digunakan untuk mengganti nama kolom dalam data frame df. Penyesuaian ini dilakukan untuk memberikan nama kolom yang lebih deskriptif, konsisten, dan mudah diakses saat melakukan analisis. Misalnya, kolom yang sebelumnya memiliki nama teknis atau tidak jelas kini menjadi lebih intuitif, seperti "age" untuk usia atau "cholesterol" untuk kadar kolesterol. Hal ini juga penting untuk memastikan nama kolom sesuai dengan sintaks R, khususnya jika nama asli kolom mengandung spasi atau karakter khusus. Dengan perubahan ini, analisis dan manipulasi data menjadi lebih efisien dan mudah dipahami.
+
+---
+
+## **4. Menghapus Nilai yang Hilang**
+
+```r
+cat("Jumlah nilai yang hilang:", sum(is.na(df)), "\n")
+```
+
+**Penjelasan**: Perintah ini digunakan untuk menghitung dan menampilkan jumlah nilai yang hilang (NA) dalam dataset df. Fungsi is.na(df) menghasilkan nilai TRUE untuk setiap elemen yang hilang, kemudian sum() menjumlahkan seluruh nilai TRUE tersebut. Outputnya menunjukkan total nilai yang hilang dalam dataset.
+
+
+### **5. Preprocessing**
+Kolom diubah namanya agar lebih mudah digunakan, missing values diidentifikasi, dan fitur kategorikal dikonversi menjadi tipe faktor. Langkah ini memastikan dataset bersih dan siap digunakan.
+
+```r
 df$sex <- as.factor(df$sex)
 df$fasting_blood_sugar <- as.factor(df$fasting_blood_sugar)
 df$angina <- as.factor(df$angina)
