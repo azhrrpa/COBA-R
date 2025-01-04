@@ -1,9 +1,17 @@
+Berikut adalah **SVM dengan Linear** 
+
+---
+
+## **SVM dengan Kernel Linear**
+
 Proyek ini bertujuan untuk menganalisis data kesehatan menggunakan algoritma Support Vector Machine (SVM). Dalam tutorial ini, kita akan melakukan preprocessing data, membangun model prediksi untuk mendeteksi risiko serangan jantung, dan mengevaluasi performa model menggunakan berbagai metrik. Selain itu, tutorial ini juga mencakup langkah-langkah visualisasi data dan hyperplane SVM. 
 
 ### **Pendahuluan**
 Support Vector Machine (SVM) adalah algoritma machine learning yang dapat digunakan untuk klasifikasi dan regresi. Salah satu kekuatan utama SVM terletak pada kemampuan kernel untuk memetakan data ke dimensi yang lebih tinggi, sehingga data yang tidak terpisahkan secara linear menjadi lebih mudah untuk dipisahkan.
 
-### **Perbedaan dengan Kernel Linear**
+---
+
+### **Perbedaan dengan Kernel Polynomial**
 
 | Aspek                 | Kernel Linear                              | Kernel Polynomial                              |
 |-----------------------|--------------------------------------------|-----------------------------------------------|
@@ -44,9 +52,11 @@ File dataset diimpor dari path lokal. Disarankan mengganti path dengan format re
 df <-  read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
 ```
 
-**penjelasan:** Fungsi read.csv() digunakan untuk memuat data dari file CSV yang berlokasi di path "C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv"  Data yang diimpor akan disimpan dalam objek df, yang nantinya dapat digunakan untuk analisis lebih lanjut seperti preprocessing, pelatihan model, atau evaluasi.
+**penjelasan:** 
+Digunakan untuk membaca file CSV bernama `heart.csv` dari jalur file yang ditentukan dan memuatnya ke dalam variabel `df` dalam bentuk **data frame**. Data frame adalah struktur data berbentuk tabel yang terdiri dari baris (observasi) dan kolom (atribut).  
 
 ---
+
 ## **3. Penamaan Ulang Kolom**
 
 ```r
@@ -55,7 +65,8 @@ colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol",
                   "oldpeak", "slope", "n_vessels", "thall", "heart_attack") 
 ```
 
-**Penjelasan**:  digunakan untuk mengganti nama kolom dalam data frame df. Penyesuaian ini dilakukan untuk memberikan nama kolom yang lebih deskriptif, konsisten, dan mudah diakses saat melakukan analisis. Misalnya, kolom yang sebelumnya memiliki nama teknis atau tidak jelas kini menjadi lebih intuitif, seperti "age" untuk usia atau "cholesterol" untuk kadar kolesterol. Hal ini juga penting untuk memastikan nama kolom sesuai dengan sintaks R, khususnya jika nama asli kolom mengandung spasi atau karakter khusus. Dengan perubahan ini, analisis dan manipulasi data menjadi lebih efisien dan mudah dipahami.
+**Penjelasan**:  
+digunakan untuk mengganti nama kolom dalam data frame df. Penyesuaian ini dilakukan untuk memberikan nama kolom yang lebih deskriptif, konsisten, dan mudah diakses saat melakukan analisis. Misalnya, kolom yang sebelumnya memiliki nama teknis atau tidak jelas kini menjadi lebih intuitif, seperti "age" untuk usia atau "cholesterol" untuk kadar kolesterol. Hal ini juga penting untuk memastikan nama kolom sesuai dengan sintaks R, khususnya jika nama asli kolom mengandung spasi atau karakter khusus. Dengan perubahan ini, analisis dan manipulasi data menjadi lebih efisien dan mudah dipahami.
 
 ---
 
@@ -65,7 +76,8 @@ colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol",
 cat("Jumlah nilai yang hilang:", sum(is.na(df)), "\n")
 ```
 
-**Penjelasan**: Perintah ini digunakan untuk menghitung dan menampilkan jumlah nilai yang hilang (NA) dalam dataset df. Fungsi is.na(df) menghasilkan nilai TRUE untuk setiap elemen yang hilang, kemudian sum() menjumlahkan seluruh nilai TRUE tersebut. Outputnya menunjukkan total nilai yang hilang dalam dataset.
+**Penjelasan**: 
+Perintah ini digunakan untuk menghitung dan menampilkan jumlah nilai yang hilang (NA) dalam dataset df. Fungsi is.na(df) menghasilkan nilai TRUE untuk setiap elemen yang hilang, kemudian sum() menjumlahkan seluruh nilai TRUE tersebut. Outputnya menunjukkan total nilai yang hilang dalam dataset.
 
 
 ### **5. Preprocessing**
@@ -79,23 +91,35 @@ df$n_vessels <- as.factor(df$n_vessels)
 df$thall <- as.factor(df$thall)
 df$heart_attack <- as.factor(df$heart_attack)
 ```
-**Penjelasan**: Kode tersebut digunakan untuk mempersiapkan dataset df dengan mengganti nama kolom menjadi lebih deskriptif dan mengonversi beberapa kolom menjadi tipe data faktor. Kolom sex, fasting_blood_sugar, angina, n_vessels, thall, dan heart_attack diubah menjadi faktor karena kolom-kolom ini merepresentasikan data kategori, bukan numerik. Langkah ini penting untuk memastikan bahwa algoritma machine learning dapat memahami dan memproses data dengan benar sesuai dengan jenis variabelnya.
+**Penjelasan**: 
+Kode tersebut digunakan untuk mempersiapkan dataset df dengan mengganti nama kolom menjadi lebih deskriptif dan mengonversi beberapa kolom menjadi tipe data faktor. Kolom sex, fasting_blood_sugar, angina, n_vessels, thall, dan heart_attack diubah menjadi faktor karena kolom-kolom ini merepresentasikan data kategori, bukan numerik. Langkah ini penting untuk memastikan bahwa algoritma machine learning dapat memahami dan memproses data dengan benar sesuai dengan jenis variabelnya.
 
 ---
 
-### **4. Exploratory Data Analysis (EDA)**
-Melakukan analisis korelasi antar fitur numerik dan menghasilkan heatmap korelasi menggunakan `ggplot2`.
+## **6. Korelasi Antar Fitur Numerik**
 
 ```r
 numeric_cols <- sapply(df, is.numeric)
 df_corr <- cor(df[, numeric_cols], use = "complete.obs")
+```
+**Penjelasan**: Kode ini digunakan untuk menghitung matriks korelasi dari kolom numerik dalam dataset df. Fungsi sapply(df, is.numeric) mengidentifikasi kolom yang bertipe numerik dan menyimpannya dalam vektor logika numeric_cols. Kemudian, fungsi cor() menghitung nilai korelasi antar kolom numerik tersebut dengan hanya menggunakan observasi lengkap (tanpa nilai yang hilang) sesuai parameter use = "complete.obs". Hasilnya, df_corr berisi matriks korelasi yang menunjukkan hubungan linear antar kolom numerik.
+
+---
+
+## **7. Visualisasi Heatmap Korelasi**
+
+```r
 melted_corr <- melt(df_corr)
 ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
   geom_tile(color = "white") +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1, 1), space = "Lab", name = "Korelasi") +
+  geom_text(aes(label = round(value, 2)), color = "black", size = 3) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 10, hjust = 1)) +
   labs(title = "Heatmap Korelasi")
 ```
-**Penjelasan**: Kode tersebut digunakan untuk membuat heatmap korelasi yang menggambarkan hubungan antara variabel numerik dalam dataset df. Pertama, kolom numerik diidentifikasi menggunakan sapply() dengan fungsi is.numeric. Kemudian, matriks korelasi dihitung menggunakan fungsi cor() dengan hanya menggunakan data lengkap (use = "complete.obs"). Matriks tersebut dilelehkan ke dalam format panjang menggunakan fungsi melt() agar dapat digunakan dalam visualisasi. Heatmap dibuat dengan ggplot2, menggunakan geom_tile() untuk menampilkan hubungan korelasi dalam bentuk warna, di mana gradien warna menunjukkan kekuatan dan arah korelasi (biru untuk negatif, merah untuk positif, putih untuk nol). Visualisasi ini membantu memahami hubungan antarvariabel dalam dataset
+**Penjelasan**: Kode ini digunakan untuk membuat visualisasi heatmap korelasi menggunakan ggplot2. Matriks korelasi df_corr yang berisi hubungan antar variabel numerik diubah menjadi format panjang dengan fungsi melt, sehingga dapat divisualisasikan. Heatmap dibuat menggunakan geom_tile, di mana nilai korelasi diwakili oleh gradasi warna: biru untuk korelasi negatif, merah untuk positif, dan putih untuk nol. Label angka pada setiap sel ditambahkan dengan geom_text untuk menampilkan nilai korelasi secara langsung. Tema minimalis (theme_minimal) diterapkan untuk tampilan bersih, sementara teks pada sumbu x dimiringkan agar label variabel tidak bertumpuk. Visualisasi ini membantu memahami hubungan linear antar variabel numerik dalam dataset dengan cepat dan intuitif.
+
 
 **Output Korelasi**
 
@@ -103,20 +127,26 @@ ggplot(melted_corr, aes(x = Var1, y = Var2, fill = value)) +
 
 ---
 
-### **5. Data Standardization and Outlier Detection**
-Semua fitur numerik diskalakan menggunakan `scale()` untuk meningkatkan kinerja model SVM. Z-score digunakan untuk mendeteksi outlier.
+## **8. Standarisasi Fitur Numerik**
 
 ```r
 df[numeric_cols] <- scale(df[numeric_cols])
-z_scores <- scale(df[, numeric_cols])
-outliers <- which(abs(z_scores) > 3, arr.ind = TRUE)
-df_no_outliers <- df[apply(z_scores, 1, function(x) all(abs(x) <= 3)), ]
 ```
-**Penjelasan**: Kode tersebut digunakan untuk melakukan scaling pada variabel numerik dalam dataset df agar memiliki rata-rata 0 dan standar deviasi 1, menggunakan fungsi scale(). Setelah itu, z-scores dihitung untuk mengidentifikasi outlier, yaitu data dengan nilai absolut lebih besar dari 3. Indeks outlier disimpan dalam outliers. Dataset kemudian difilter untuk menghapus semua baris yang mengandung outlier, menghasilkan dataset baru df_no_outliers yang hanya berisi data tanpa outlier. Langkah ini bertujuan untuk meningkatkan kualitas data sehingga analisis atau model yang dibangun tidak dipengaruhi oleh nilai ekstrem.
+**Penjelasan**: Kode ini digunakan untuk melakukan normalisasi atau standarisasi pada kolom numerik dalam dataset df. Fungsi scale() mengubah setiap kolom numerik sehingga memiliki mean (rata-rata) 0 dan standard deviation (simpangan baku) 1. Normalisasi ini penting untuk memastikan semua variabel numerik berada pada skala yang sama, terutama saat digunakan dalam algoritma machine learning seperti SVM atau k-Means yang sensitif terhadap skala variabel. Setelah eksekusi, semua kolom numerik dalam df akan berada pada skala yang seragam, sehingga meminimalkan bias akibat perbedaan skala antar variabel.
 
 ---
 
-### **6. Dataset Splitting**
+## **9. Identifikasi Outliers**
+
+```r
+z_scores <- scale(df[, numeric_cols])
+outliers <- which(abs(z_scores) > 3, arr.ind = TRUE)
+```
+**Penjelasan**: Kode ini digunakan untuk mendeteksi outlier pada kolom numerik dalam dataset df menggunakan metode z-score. Fungsi scale() menghitung z-score, yaitu ukuran deviasi setiap nilai dari rata-rata dalam satuan simpangan baku. Nilai z-score yang lebih besar dari 3 (atau kurang dari -3) dianggap sebagai outlier karena berada jauh dari rata-rata. Perintah which(..., arr.ind = TRUE) digunakan untuk menemukan posisi elemen-elemen tersebut dalam dataset, sehingga menghasilkan indeks baris dan kolom yang mengindikasikan lokasi outlier. Proses ini membantu mengidentifikasi nilai ekstrem yang dapat memengaruhi hasil analisis atau model.
+
+---
+
+### **10. Dataset Splitting**
 Dataset dibagi menjadi 80% untuk pelatihan dan 20% untuk pengujian menggunakan fungsi `createDataPartition`.
 
 ```r
@@ -129,7 +159,7 @@ df_test <- df[-trainIndex, ]
 
 ---
 
-### **7. Model Training (SVM)**
+### **11. Model Training Linear (SVM)**
 Model SVM dilatih menggunakan kernel linear dan cross-validation (K-Fold). Hyperparameter C disesuaikan untuk mencari performa terbaik.
 
 ```r
@@ -142,7 +172,38 @@ svm_model <- train(heart_attack ~ ., data = df_train, method = "svmLinear",
 
 ---
 
-### **8. Evaluation Metrics**
+### **12. Evaluasi Akurasi Model SVM dengan Cross-Validation**
+
+Apa Itu Cross-Validation?
+Cross-validation adalah metode untuk mengevaluasi performa model machine learning dengan cara membagi dataset ke beberapa bagian (folds). Setiap bagian digunakan bergantian sebagai data uji dan data latih untuk menghindari overfitting dan memastikan model memiliki performa yang konsisten di berbagai subset data.
+
+```r
+cat("Hasil Cross-Validation:\n")
+```
+Menampilkan pesan ke console untuk memberi tahu bahwa hasil evaluasi cross-validation sedang diproses. 
+
+```r
+mean_accuracy <- mean(svm_model$results$Accuracy)
+```
+Rata-rata akurasi dihitung dari hasil cross-validation, yang menunjukkan seberapa baik model dapat memprediksi data dengan benar.
+
+```r
+std_dev_accuracy <- sd(svm_model$results$Accuracy)
+```
+Standar deviasi digunakan untuk mengukur variabilitas hasil akurasi dari berbagai subset data (folds).
+>>> Semakin rendah standar deviasi, semakin konsisten model dalam memprediksi data.
+
+```r
+cat("Rata-rata Akurasi:", mean_accuracy, "\n")
+```
+Setelah rata-rata akurasi dihitung, hasil tersebut ditampilkan ke console agar dapat dianalisis.
+
+```r
+cat("Standar Deviasi Akurasi:", std_dev_accuracy, "\n")
+```
+Standar deviasi akurasi juga ditampilkan ke console untuk mengetahui stabilitas performa model.
+
+### **13. Evaluation Metrics**
 Model dievaluasi menggunakan data pengujian. Metrik seperti akurasi, precision, recall, F1-score, dan AUC dihitung dan ditampilkan.
 
 ```r
@@ -155,7 +216,7 @@ auc_val <- auc(roc_obj)
 
 ---
 
-### **9. Visualizing Hyperplanes**
+### **14. Visualizing Hyperplanes**
 Plot hyperplane SVM dibuat menggunakan kombinasi 2 fitur dengan `plot.svm`. Ini membantu memahami klasifikasi dalam ruang 2D.
 
 ```r
