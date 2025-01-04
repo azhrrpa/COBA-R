@@ -21,6 +21,11 @@ Support Vector Machine (SVM) adalah algoritma machine learning yang dapat diguna
 | **Hyperparameter**    | Hanya melibatkan parameter regulasi (C)    | Melibatkan derajat polinomial (degree) dan skala |
 
 ---
+### 🗂 Dataset
+
+Model SVM ini dilatih menggunakan dataset **Heart Disease** yang dapat dilihat di repositori berikut:  
+🔗 [heart.csv](https://github.com/azhrrpa/SVM-R/blob/main/heart.csv)
+---
 
 ### **1. Importing Required Libraries**
 Kode memuat sejumlah pustaka R yang relevan untuk analisis, pemrosesan data, dan visualisasi, seperti `ggplot2` untuk plot, `caret` untuk pelatihan model machine learning, dan `e1071` untuk algoritma SVM.
