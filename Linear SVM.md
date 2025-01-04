@@ -25,6 +25,7 @@ Support Vector Machine (SVM) adalah algoritma machine learning yang dapat diguna
 
 Model SVM ini dilatih menggunakan dataset **Heart Disease** yang dapat dilihat di repositori berikut:  
 🔗 [heart.csv](https://github.com/azhrrpa/SVM-R/blob/main/heart.csv)
+
 ---
 
 ### **1. Importing Required Libraries**
