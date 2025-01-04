@@ -47,7 +47,8 @@ Dalam eksperimen ini, kernel polynomial digunakan untuk memodelkan hubungan komp
 
 ---
 
-## **1. Memuat Library yang Dibutuhkan**
+## **1. Importing Required Libraries**
+Kode memuat sejumlah pustaka R yang relevan untuk analisis, pemrosesan data, dan visualisasi, seperti `ggplot2` untuk plot, `caret` untuk pelatihan model machine learning, dan `e1071` untuk algoritma SVM.
 
 ```r
 library(ggplot2)
@@ -69,7 +70,8 @@ Library yang digunakan:
 
 ---
 
-## **2. Memuat Dataset**
+## **2. Load Dataset**
+File dataset diimpor dari path lokal. Disarankan mengganti path dengan format relatif atau menempatkan dataset dalam direktori kerja agar file dapat diakses secara universal.
 
 ```r
 df <- read.csv("C:/Users/Asus/OneDrive/Documents/CCIT/TIES SEM 3/projekkkkkkkk/heart.csv")
@@ -88,7 +90,8 @@ colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol",
                   "oldpeak", "slope", "n_vessels", "thall", "heart_attack") 
 ```
 
-**Penjelasan**:  digunakan untuk mengganti nama kolom dalam data frame df. Penyesuaian ini dilakukan untuk memberikan nama kolom yang lebih deskriptif, konsisten, dan mudah diakses saat melakukan analisis. Misalnya, kolom yang sebelumnya memiliki nama teknis atau tidak jelas kini menjadi lebih intuitif, seperti "age" untuk usia atau "cholesterol" untuk kadar kolesterol. Hal ini juga penting untuk memastikan nama kolom sesuai dengan sintaks R, khususnya jika nama asli kolom mengandung spasi atau karakter khusus. Dengan perubahan ini, analisis dan manipulasi data menjadi lebih efisien dan mudah dipahami.
+**Penjelasan**:  
+digunakan untuk mengganti nama kolom dalam data frame df. Penyesuaian ini dilakukan untuk memberikan nama kolom yang lebih deskriptif, konsisten, dan mudah diakses saat melakukan analisis. Misalnya, kolom yang sebelumnya memiliki nama teknis atau tidak jelas kini menjadi lebih intuitif, seperti "age" untuk usia atau "cholesterol" untuk kadar kolesterol. Hal ini juga penting untuk memastikan nama kolom sesuai dengan sintaks R, khususnya jika nama asli kolom mengandung spasi atau karakter khusus. Dengan perubahan ini, analisis dan manipulasi data menjadi lebih efisien dan mudah dipahami.
 
 ---
 
@@ -98,9 +101,11 @@ colnames(df) <- c("age", "sex", "chest_pain", "blood_pressure", "cholesterol",
 cat("Jumlah nilai yang hilang:", sum(is.na(df)), "\n")
 ```
 
-**Penjelasan**: Perintah ini digunakan untuk menghitung dan menampilkan jumlah nilai yang hilang (NA) dalam dataset df. Fungsi is.na(df) menghasilkan nilai TRUE untuk setiap elemen yang hilang, kemudian sum() menjumlahkan seluruh nilai TRUE tersebut. Outputnya menunjukkan total nilai yang hilang dalam dataset.
+**Penjelasan**: 
+Perintah ini digunakan untuk menghitung dan menampilkan jumlah nilai yang hilang (NA) dalam dataset df. Fungsi is.na(df) menghasilkan nilai TRUE untuk setiap elemen yang hilang, kemudian sum() menjumlahkan seluruh nilai TRUE tersebut. Outputnya menunjukkan total nilai yang hilang dalam dataset.
 
-## **5. Konversi Kolom Kategorikal Menjadi Faktor**
+## **5. Preprocessing**
+Kolom diubah namanya agar lebih mudah digunakan, missing values diidentifikasi, dan fitur kategorikal dikonversi menjadi tipe faktor. Langkah ini memastikan dataset bersih dan siap digunakan.
 
 ```r
 df$sex <- as.factor(df$sex)
@@ -112,7 +117,7 @@ df$heart_attack <- as.factor(df$heart_attack)
 ```
 
 **Penjelasan**:  
-Kolom-kolom dengan data kategorikal, seperti sex, fasting_blood_sugar, angina, dan lainnya, diubah menjadi tipe data factor. Konversi ini penting untuk analisis dan pemodelan, terutama dalam algoritma seperti SVM (Support Vector Machine), yang memerlukan tipe data faktor untuk memproses variabel kategorikal secara benar.
+Kode tersebut digunakan untuk mempersiapkan dataset df dengan mengganti nama kolom menjadi lebih deskriptif dan mengonversi beberapa kolom menjadi tipe data faktor. Kolom sex, fasting_blood_sugar, angina, n_vessels, thall, dan heart_attack diubah menjadi faktor karena kolom-kolom ini merepresentasikan data kategori, bukan numerik. Langkah ini penting untuk memastikan bahwa algoritma machine learning dapat memahami dan memproses data dengan benar sesuai dengan jenis variabelnya.
 
 ---
 
@@ -165,18 +170,20 @@ outliers <- which(abs(z_scores) > 3, arr.ind = TRUE)
 
 ---
 
-## **10. Membagi Dataset**
+### **10. Dataset Splitting**
+Dataset dibagi menjadi 80% untuk pelatihan dan 20% untuk pengujian menggunakan fungsi `createDataPartition`.
 
 ```r
+set.seed(42)
 trainIndex <- createDataPartition(df$heart_attack, p = 0.8, list = FALSE)
 df_train <- df[trainIndex, ]
 df_test <- df[-trainIndex, ]
 ```
-**Penjelasan**: Kode tersebut bertujuan untuk membagi dataset menjadi data latih (80%) dan data uji (20%) menggunakan fungsi createDataPartition(), yang memastikan pembagian stratifikasi berdasarkan variabel target (heart_attack). Data latih (df_train) digunakan untuk melatih model, sementara data uji (df_test) digunakan untuk mengukur kinerja model pada data yang belum pernah dilihat, sehingga membantu mengevaluasi kemampuan generalisasi model.
+**Penjelasan**: Kode tersebut digunakan untuk membagi dataset df menjadi data latih (df_train) dan data uji (df_test) dengan proporsi 80:20, menggunakan fungsi createDataPartition(). Fungsi set.seed(42) memastikan pembagian data bersifat reproducible, sehingga hasilnya akan sama setiap kali kode dijalankan. Pembagian ini dilakukan secara stratified berdasarkan variabel target heart_attack, memastikan distribusi kelas tetap seimbang di data latih dan data uji. Data latih digunakan untuk melatih model, sementara data uji digunakan untuk mengevaluasi kinerja mode
 
 ---
 
-## **11. Pelatihan Model SVM dengan Kernel Polynomial**
+## **11. Model Training SVM dengan Kernel Polynomial**
 
 ```r
 svm_model <- train(heart_attack ~ ., data = df_train, method = "svmPoly", 
@@ -185,4 +192,65 @@ svm_model <- train(heart_attack ~ ., data = df_train, method = "svmPoly",
 **Penjelasan**: Model dilatih menggunakan fungsi train() dari paket caret, di mana heart_attack ~ . menunjukkan bahwa variabel target adalah heart_attack, sementara semua variabel lainnya digunakan sebagai fitur. Metode svmPoly digunakan untuk memilih kernel polinomial. Parameter C, degree, dan scale disesuaikan berdasarkan nilai-nilai dalam tuneGrid untuk menemukan kombinasi terbaik yang menghasilkan kinerja optimal.
 
 ---
+
+### **12. Evaluasi Akurasi Model SVM dengan Cross-Validation**
+
+Apa Itu Cross-Validation?
+Cross-validation adalah metode untuk mengevaluasi performa model machine learning dengan cara membagi dataset ke beberapa bagian (folds). Setiap bagian digunakan bergantian sebagai data uji dan data latih untuk menghindari overfitting dan memastikan model memiliki performa yang konsisten di berbagai subset data.
+
+```r
+cat("Hasil Cross-Validation:\n")
+```
+Menampilkan pesan ke console untuk memberi tahu bahwa hasil evaluasi cross-validation sedang diproses. 
+
+```r
+mean_accuracy <- mean(svm_model$results$Accuracy)
+```
+Rata-rata akurasi dihitung dari hasil cross-validation, yang menunjukkan seberapa baik model dapat memprediksi data dengan benar.
+
+```r
+std_dev_accuracy <- sd(svm_model$results$Accuracy)
+```
+Standar deviasi digunakan untuk mengukur variabilitas hasil akurasi dari berbagai subset data (folds).
+>>> Semakin rendah standar deviasi, semakin konsisten model dalam memprediksi data.
+
+```r
+cat("Rata-rata Akurasi:", mean_accuracy, "\n")
+```
+Setelah rata-rata akurasi dihitung, hasil tersebut ditampilkan ke console agar dapat dianalisis.
+
+```r
+cat("Standar Deviasi Akurasi:", std_dev_accuracy, "\n")
+```
+Standar deviasi akurasi juga ditampilkan ke console untuk mengetahui stabilitas performa model.
+
+### **13. Evaluation Metrics**
+Model dievaluasi menggunakan data pengujian. Metrik seperti akurasi, precision, recall, F1-score, dan AUC dihitung dan ditampilkan.
+
+```r
+pred <- predict(svm_model, df_test)
+conf_matrix <- confusionMatrix(pred, df_test$heart_attack)
+roc_obj <- roc(as.numeric(df_test$heart_attack), as.numeric(pred))
+auc_val <- auc(roc_obj)
+```
+**Penjelasan**: Kode tersebut digunakan untuk mengevaluasi kinerja model SVM yang telah dilatih. Prediksi pada data uji (df_test) dilakukan menggunakan fungsi predict(), dan hasilnya disimpan dalam pred. Matriks kebingungan (confusion matrix) dihitung menggunakan confusionMatrix() untuk mengevaluasi metrik seperti akurasi, sensitivitas, dan spesifisitas. Selain itu, kurva ROC dihitung menggunakan fungsi roc(), yang membandingkan nilai aktual dan prediksi sebagai numerik, untuk mengukur kemampuan model dalam membedakan kelas. Nilai Area Under the Curve (AUC) dihitung dengan auc() untuk memberikan satu angka yang mencerminkan performa model, di mana nilai yang lebih tinggi menunjukkan performa yang lebih baik.
+
+### **14. Visualizing Hyperplanes**
+Plot hyperplane SVM dibuat menggunakan kombinasi 2 fitur dengan `plot.svm`. Ini membantu memahami klasifikasi dalam ruang 2D.
+
+ini merupakan salah satu dari visualisasi:
+
+```r
+subset_df1 <- df[, c("age", "blood_pressure", "heart_attack")]
+svm_model1 <- svm(heart_attack ~ age + blood_pressure, data = subset_df1, kernel = "linear", cost = 1, scale = TRUE)
+plot(svm_model1, subset_df1, age ~ blood_pressure, 
+     main = "SVM Hyperplane: Age vs Blood Pressure",
+     col = c("lightblue", "lightpink"), 
+     symbolPalette = c("red", "blue"))
+legend("topright", legend = levels(subset_df1$heart_attack), col = c("red", "blue"), pch = 16)
+```
+**Penjelasan**: 
+Kode tersebut digunakan untuk membangun model Support Vector Machine (SVM) dengan kernel linear untuk memprediksi variabel target heart_attack berdasarkan dua fitur, yaitu age dan blood_pressure, yang diambil dari subset dataset df. Model dilatih menggunakan fungsi svm() dengan parameter cost = 1, yang mengatur tingkat penalti untuk kesalahan klasifikasi. Setelah model dilatih, fungsi plot() digunakan untuk memvisualisasikan hasil model SVM, dengan plot yang menggambarkan pemisahan kelas (heart_attack) berdasarkan variabel age dan blood_pressure dalam ruang dua dimensi. Visualisasi ini membantu memahami bagaimana model memisahkan dua kelas dalam data
+
+
 
